@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevMark Agency | Luxury Marketing for Developer Tools</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Cormorant Garamond', 'serif'],
+                    },
+                    colors: {
+                        gold: '#D4AF37',
+                        'gold-light': '#F4E4A6',
+                        'gold-dark': '#B8941D',
+                        champagne: '#F7E7CE',
+                        cream: '#FFFDD0',
+                        midnight: '#0a0a0f',
+                        'midnight-light': '#1a1a2e',
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                        'luxury-gradient': 'linear-gradient(135deg, #D4AF37 0%, #F4E4A6 50%, #D4AF37 100%)',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0f;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        
+        .font-serif {
+            font-family: 'Cormorant Garamond', serif;
+        }
+        
+        /* Gold gradient text */
+        .gold-text {
+            background: linear-gradient(135deg, #D4AF37 0%, #F4E4A6 50%, #D4AF37 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% auto;
+            animation: shine 3s linear infinite;
+        }
+        
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+        
+        /* Luxury glass effect */
+        .glass-luxury {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+        
+        .glass-luxury:hover {
+            border-color: rgba(212, 175, 55, 0.3);
+            box-shadow: 0 0 60px rgba(212, 175, 55, 0.1);
+        }
+        
+        /* Gold button */
+        .btn-gold {
+            background: linear-gradient(135deg, #D4AF37 0%, #F4E4A6 50%, #D4AF37 100%);
+            background-size: 200% auto;
+            color: #0a0a0f;
+            border: none;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-gold:hover {
+            background-position: right center;
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        /* Gold glow */
+        .gold-glow {
+            box-shadow: 0 0 60px rgba(212, 175, 55, 0.2), 0 0 100px rgba(212, 175, 55, 0.1);
+        }
+        
+        /* Image hover effect */
+        .img-luxury {
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .img-luxury:hover {
+            transform: scale(1.02);
+            filter: brightness(1.1);
+        }
+        
+        /* Noise texture overlay */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.03;
+            z-index: 1000;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #0a0a0f;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #D4AF37, #B8941D);
+            border-radius: 4px;
+        }
+        
+        /* Custom cursor */
+        .cursor-gold {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #D4AF37;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease;
+        }
+        
+        /* Reveal animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        
+        /* Parallax layers */
+        .parallax-layer {
+            will-change: transform;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Noise overlay -->
+    <div class="noise-overlay"></div>
+    
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass-luxury border-b border-gold/10">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex justify-between items-center h-24">
+                <div class="flex items-center gap-3">
+                    <span class="text-3xl font-serif font-medium tracking-wide gold-text">DevMark</span>
+                    <span class="text-white/40 text-xs tracking-[0.3em] uppercase">Agency</span>
+                </div>
+                <div class="hidden md:flex items-center gap-12">
+                    <a href="#services" class="text-white/60 hover:text-gold-light transition text-sm tracking-wider uppercase">Services</a>
+                    <a href="#work" class="text-white/60 hover:text-gold-light transition text-sm tracking-wider uppercase">Work</a>
+                    <a href="#process" class="text-white/60 hover:text-gold-light transition text-sm tracking-wider uppercase">Process</a>
+                    <a href="#contact" class="px-8 py-3 btn-gold rounded-full text-sm font-medium tracking-wider uppercase">Start Project</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Image -->
+    <section class="min-h-screen relative flex items-center justify-center overflow-hidden">
+        <!-- Background Image -->
+        <div class="absolute inset-0 z-0">
+            <img 
+                src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1920&q=80" 
+                alt="Luxury abstract background"
+                class="w-full h-full object-cover opacity-60"
+            >
+            <div class="absolute inset-0 bg-gradient-to-b from-midnight/80 via-midnight/60 to-midnight"></div>
+        </div>
+        
+        <!-- Content -->
+        <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-32 text-center">
+            <div class="inline-block mb-8">
+                <span class="px-6 py-2 border border-gold/30 rounded-full text-gold-light/80 text-xs tracking-[0.3em] uppercase">
+                    Premium Marketing Agency
+                </span>
+            </div>
+            
+            <h1 class="font-serif text-6xl md:text-8xl lg:text-9xl font-light leading-none mb-8">
+                <span class="block text-white/90">Crafting</span>
+                <span class="block gold-text italic mt-2">Digital Luxury</span>
+            </h1>
+            
+            <p class="text-xl md:text-2xl text-white/50 max-w-3xl mx-auto mb-12 font-light leading-relaxed">
+                Elevating developer tools through sophisticated marketing strategies that resonate with discerning technical audiences
+            </p>
+            
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
+                <a href="#contact" class="px-12 py-4 btn-gold rounded-full text-lg font-medium tracking-wider">
+                    Begin Your Journey
+                </a>
+                <a href="#work" class="px-12 py-4 border border-gold/30 text-gold-light rounded-full hover:bg-gold/10 transition text-lg font-medium tracking-wider">
+                    View Our Work
+                </a>
+            </div>
+            
+            <!-- Stats -->
+            <div class="mt-20 grid grid-cols-3 gap-12 max-w-3xl mx-auto">
+                <div class="text-center">
+                    <p class="font-serif text-5xl gold-text mb-2">$50M+</p>
+                    <p class="text-white/40 text-sm tracking-wider uppercase">Revenue Generated</p>
+                </div>
+                <div class="text-center">
+                    <p class="font-serif text-5xl gold-text mb-2">150+</p>
+                    <p class="text-white/40 text-sm tracking-wider uppercase">Premium Projects</p>
+                </div>
+                <div class="text-center">
+                    <p class="font-serif text-5xl gold-text mb-2">340%</p>
+                    <p class="text-white/40 text-sm tracking-wider uppercase">Avg. Growth</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Image Section -->
+    <section class="py-32 relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div class="reveal">
+                    <span class="text-gold-light/80 text-xs tracking-[0.3em] uppercase mb-6 block">The Art of Marketing</span>
+                    <h2 class="font-serif text-5xl md:text-6xl font-light text-white mb-8 leading-tight">
+                        Where <span class="gold-text italic">Strategy</span> Meets <span class="gold-text italic">Sophistication</span>
+                    </h2>
+                    <p class="text-white/60 text-lg leading-relaxed mb-8">
+                        We believe marketing for developer tools should be as refined and thoughtful as the products themselves. Our approach combines technical expertise with luxury brand positioning.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-2 h-2 rounded-full bg-gold"></div>
+                            <span class="text-white/70">Bespoke landing page experiences</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-2 h-2 rounded-full bg-gold"></div>
+                            <span class="text-white/70">Technical content at Vogue-level quality</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-2 h-2 rounded-full bg-gold"></div>
+                            <span class="text-white/70">White-glove campaign management</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="reveal">
+                    <div class="relative">
+                        <div class="absolute -inset-4 bg-gradient-to-r from-gold/20 to-gold-light/20 rounded-3xl blur-3xl"></div>
+                        <img 
+                            src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80" 
+                            alt="Luxury office space"
+                            class="relative rounded-2xl img-luxury w-full h-[600px] object-cover"
+                        >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services with Images -->
+    <section id="services" class="py-32 bg-gradient-to-b from-midnight to-midnight-light">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-24 reveal">
+                <span class="text-gold-light/80 text-xs tracking-[0.3em] uppercase mb-6 block">Services</span>
+                <h2 class="font-serif text-6xl md:text-7xl font-light text-white">
+                    Our <span class="gold-text italic">Expertise</span>
+                </h2>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Service 1 -->
+                <div class="glass-luxury rounded-3xl overflow-hidden reveal group">
+                    <div class="h-64 overflow-hidden">
+                        <img 
+                            src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&q=80" 
+                            alt="Digital marketing"
+                            class="w-full h-full object-cover img-luxury"
+                        >
+                    </div>
+                    <div class="p-8">
+                        <h3 class="font-serif text-2xl text-white mb-4">Landing Page Design</h3>
+                        <p class="text-white/50 leading-relaxed">High-converting, visually stunning landing pages that captivate and convert technical audiences.</p>
+                    </div>
+                </div>
+                
+                <!-- Service 2 -->
+                <div class="glass-luxury rounded-3xl overflow-hidden reveal group">
+                    <div class="h-64 overflow-hidden">
+                        <img 
+                            src="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=600&q=80" 
+                            alt="Content creation"
+                            class="w-full h-full object-cover img-luxury"
+                        >
+                    </div>
+                    <div class="p-8">
+                        <h3 class="font-serif text-2xl text-white mb-4">Technical Content</h3>
+                        <p class="text-white/50 leading-relaxed">Editorial-quality blog posts, documentation, and tutorials that establish thought leadership.</p>
+                    </div>
+                </div>
+                
+                <!-- Service 3 -->
+                <div class="glass-luxury rounded-3xl overflow-hidden reveal group">
+                    <div class="h-64 overflow-hidden">
+                        <img 
+                            src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&q=80" 
+                            alt="Strategy"
+                            class="w-full h-full object-cover img-luxury"
+                        >
+                    </div>
+                    <div class="p-8">
+                        <h3 class="font-serif text-2xl text-white mb-4">Product Marketing</h3>
+                        <p class="text-white/50 leading-relaxed">Launch campaigns and feature announcements worthy of premium developer tools.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Luxury Showcase -->
+    <section class="py-32 relative overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img 
+                src="https://images.unsplash.com/photo-1557682250-33bd709cbe85?w=1920&q=80" 
+                alt="Abstract luxury"
+                class="w-full h-full object-cover opacity-40"
+            >
+            <div class="absolute inset-0 bg-gradient-to-b from-midnight via-midnight/80 to-midnight"></div>
+        </div>
+        
+        <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-24 reveal">
+                <h2 class="font-serif text-6xl md:text-8xl font-light text-white leading-tight">
+                    <span class="block">The</span>
+                    <span class="gold-text italic">Gold Standard</span>
+                    <span class="block text-white/80">in Dev Marketing</span>
+                </h2>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div class="space-y-8 reveal">
+                    <div class="glass-luxury rounded-2xl p-8">
+                        <p class="font-serif text-4xl text-white/90 italic mb-4">"DevMark transformed our product launch into a premium experience that developers genuinely appreciated."</p>
+                        <p class="text-gold-light">— Sarah Chen, CEO at TechFlow</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="glass-luxury rounded-xl p-6 text-center">
+                            <p class="font-serif text-4xl gold-text mb-2">4.9</p>
+                            <p class="text-white/50 text-sm">Client Rating</p>
+                        </div>
+                        <div class="glass-luxury rounded-xl p-6 text-center">
+                            <p class="font-serif text-4xl gold-text mb-2">98%</p>
+                            <p class="text-white/50 text-sm">Retention Rate</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="reveal">
+                    <img 
+                        src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&q=80" 
+                        alt="Luxury workspace"
+                        class="rounded-2xl img-luxury w-full h-[500px] object-cover"
+                    >
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="py-32">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-24 reveal">
+                <span class="text-gold-light/80 text-xs tracking-[0.3em] uppercase mb-6 block">Investment</span>
+                <h2 class="font-serif text-6xl md:text-7xl font-light text-white">
+                    Tailored <span class="gold-text italic">Solutions</span>
+                </h2>
+            </div>
+            
+            <div class="grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <!-- Premium -->
+                <div class="glass-luxury rounded-3xl p-10 reveal">
+                    <h3 class="font-serif text-2xl text-white mb-2">Premium</h3>
+                    <p class="text-white/50 mb-8">For established dev tools</p>
+                    <div class="mb-8">
+                        <span class="font-serif text-5xl gold-text">$15,000</span>
+                        <span class="text-white/40">/project</span>
+                    </div>
+                    <ul class="space-y-4 mb-8 text-white/70">
+                        <li class="flex items-center gap-3">Bespoke landing page</li>
+                        <li class="flex items-center gap-3">Premium content package</li>
+                        <li class="flex items-center gap-3">Analytics & optimization</li>
+                        <li class="flex items-center gap-3">Dedicated account manager</li>
+                    </ul>
+                    <a href="#contact" class="block text-center py-4 border border-gold/30 rounded-full hover:bg-gold/10 transition">Inquire</a>
+                </div>
+                
+                <!-- Platinum (Featured) -->
+                <div class="glass-luxury rounded-3xl p-10 relative gold-glow reveal">
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-6 py-2 bg-gradient-to-r from-gold to-gold-light rounded-full text-midnight text-sm font-medium tracking-wider">
+                        MOST POPULAR
+                    </div>
+                    <h3 class="font-serif text-2xl text-white mb-2 mt-4">Platinum</h3>
+                    <p class="text-white/50 mb-8">For scaling companies</p>
+                    <div class="mb-8">
+                        <span class="font-serif text-5xl gold-text">$25,000</span>
+                        <span class="text-white/40">/month</span>
+                    </div>
+                    <ul class="space-y-4 mb-8 text-white/70">
+                        <li class="flex items-center gap-3">Everything in Premium</li>
+                        <li class="flex items-center gap-3">Full-funnel campaigns</li>
+                        <li class="flex items-center gap-3">Video production</li>
+                        <li class="flex items-center gap-3">Priority support 24/7</li>
+                    </ul>
+                    <a href="#contact" class="block text-center py-4 btn-gold rounded-full font-medium">Get Started</a>
+                </div>
+                
+                <!-- Enterprise -->
+                <div class="glass-luxury rounded-3xl p-10 reveal">
+                    <h3 class="font-serif text-2xl text-white mb-2">Enterprise</h3>
+                    <p class="text-white/50 mb-8">For industry leaders</p>
+                    <div class="mb-8">
+                        <span class="font-serif text-5xl gold-text">Custom</span>
+                    </div>
+                    <ul class="space-y-4 mb-8 text-white/70">
+                        <li class="flex items-center gap-3">Dedicated team</li>
+                        <li class="flex items-center gap-3">Full brand partnership</li>
+                        <li class="flex items-center gap-3">Event & conference support</li>
+                        <li class="flex items-center gap-3">White-glove service</li>
+                    </ul>
+                    <a href="#contact" class="block text-center py-4 border border-gold/30 rounded-full hover:bg-gold/10 transition">Contact</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="py-32 bg-gradient-to-b from-midnight-light to-midnight">
+        <div class="max-w-4xl mx-auto px-6 lg:px-8">
+            <div class="glass-luxury rounded-3xl p-12 lg:p-16 reveal">
+                <div class="text-center mb-12">
+                    <span class="text-gold-light/80 text-xs tracking-[0.3em] uppercase mb-6 block">Contact</span>
+                    <h2 class="font-serif text-5xl lg:text-6xl font-light text-white mb-6">
+                        Begin Your <span class="gold-text italic">Transformation</span>
+                    </h2>
+                    <p class="text-xl text-white/50">Ready to elevate your developer tool?</p>
+                </div>
+                
+                <form class="space-y-6">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-gold-light/80 text-sm mb-2">Name</label>
+                            <input type="text" class="w-full px-6 py-4 bg-white/5 border border-gold/20 rounded-xl focus:outline-none focus:border-gold transition text-white" placeholder="Your name">
+                        </div>
+                        <div>
+                            <label class="block text-gold-light/80 text-sm mb-2">Email</label>
+                            <input type="email" class="w-full px-6 py-4 bg-white/5 border border-gold/20 rounded-xl focus:outline-none focus:border-gold transition text-white" placeholder="you@company.com">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-gold-light/80 text-sm mb-2">Company</label>
+                        <input type="text" class="w-full px-6 py-4 bg-white/5 border border-gold/20 rounded-xl focus:outline-none focus:border-gold transition text-white" placeholder="Your company">
+                    </div>
+                    <div>
+                        <label class="block text-gold-light/80 text-sm mb-2">Message</label>
+                        <textarea rows="4" class="w-full px-6 py-4 bg-white/5 border border-gold/20 rounded-xl focus:outline-none focus:border-gold transition text-white resize-none" placeholder="Tell us about your vision"></textarea>
+                    </div>
+                    <button type="submit" class="w-full py-5 btn-gold rounded-xl text-lg font-medium tracking-wider">
+                        Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-16 border-t border-gold/10">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-8">
+                <div class="flex items-center gap-3">
+                    <span class="text-3xl font-serif font-medium gold-text">DevMark</span>
+                    <span class="text-white/30 text-xs tracking-[0.3em] uppercase">Agency</span>
+                </div>
+                <p class="text-white/30 text-sm">© 2026 DevMark Agency. Crafted with precision.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- GSAP Animations -->
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Reveal animations
+        const reveals = document.querySelectorAll('.reveal');
+        reveals.forEach((el, i) => {
+            gsap.fromTo(el, 
+                { opacity: 0, y: 60 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1,
+                    delay: i * 0.1,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: el,
+                        start: 'top 85%',
+                    }
+                }
+            );
+        });
+        
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+        
+        // Form submission
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your inquiry. Our team will contact you within 24 hours.');
+        });
+    </script>
+</body>
+</html>
